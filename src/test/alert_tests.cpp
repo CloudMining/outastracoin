@@ -29,12 +29,12 @@
 
     SignAndSave(alert, "test/alertTests");
 
-    alert.setSubVer.insert(std::string("/Satoshi:0.1.0/"));
-    alert.strStatusBar  = "Alert 1 for Satoshi 0.1.0";
+    alert.setSubVer.insert(std::string("/Outastra:0.1.0/"));
+    alert.strStatusBar  = "Alert 1 for Outastra 0.1.0";
     SignAndSave(alert, "test/alertTests");
 
-    alert.setSubVer.insert(std::string("/Satoshi:0.2.0/"));
-    alert.strStatusBar  = "Alert 1 for Satoshi 0.1.0, 0.2.0";
+    alert.setSubVer.insert(std::string("/Outastra:0.2.0/"));
+    alert.strStatusBar  = "Alert 1 for Outastra 0.1.0, 0.2.0";
     SignAndSave(alert, "test/alertTests");
 
     alert.setSubVer.clear();
@@ -54,8 +54,8 @@
     SignAndSave(alert, "test/alertTests");
 
     ++alert.nID;
-    alert.strStatusBar  = "Alert 2 for Satoshi 0.1.0";
-    alert.setSubVer.insert(std::string("/Satoshi:0.1.0/"));
+    alert.strStatusBar  = "Alert 2 for Outastra 0.1.0";
+    alert.setSubVer.insert(std::string("/Outastra:0.1.0/"));
     SignAndSave(alert, "test/alertTests");
 
     ++alert.nID;
@@ -128,27 +128,27 @@ BOOST_AUTO_TEST_CASE(AlertApplies)
     // Matches:
     BOOST_CHECK(alerts[0].AppliesTo(1, ""));
     BOOST_CHECK(alerts[0].AppliesTo(70001, ""));
-    BOOST_CHECK(alerts[0].AppliesTo(1, "/Satoshi:11.11.11/"));
+    BOOST_CHECK(alerts[0].AppliesTo(1, "/Outastra:11.11.11/"));
 
-    BOOST_CHECK(alerts[1].AppliesTo(1, "/Satoshi:0.1.0/"));
-    BOOST_CHECK(alerts[1].AppliesTo(70001, "/Satoshi:0.1.0/"));
+    BOOST_CHECK(alerts[1].AppliesTo(1, "/Outastra:0.1.0/"));
+    BOOST_CHECK(alerts[1].AppliesTo(70001, "/Outastra:0.1.0/"));
 
-    BOOST_CHECK(alerts[2].AppliesTo(1, "/Satoshi:0.1.0/"));
-    BOOST_CHECK(alerts[2].AppliesTo(1, "/Satoshi:0.2.0/"));
+    BOOST_CHECK(alerts[2].AppliesTo(1, "/Outastra:0.1.0/"));
+    BOOST_CHECK(alerts[2].AppliesTo(1, "/Outastra:0.2.0/"));
 
     // Don't match:
     BOOST_CHECK(!alerts[0].AppliesTo(-1, ""));
     BOOST_CHECK(!alerts[0].AppliesTo(70002, ""));
 
     BOOST_CHECK(!alerts[1].AppliesTo(1, ""));
-    BOOST_CHECK(!alerts[1].AppliesTo(1, "Satoshi:0.1.0"));
-    BOOST_CHECK(!alerts[1].AppliesTo(1, "/Satoshi:0.1.0"));
-    BOOST_CHECK(!alerts[1].AppliesTo(1, "Satoshi:0.1.0/"));
-    BOOST_CHECK(!alerts[1].AppliesTo(-1, "/Satoshi:0.1.0/"));
-    BOOST_CHECK(!alerts[1].AppliesTo(70002, "/Satoshi:0.1.0/"));
-    BOOST_CHECK(!alerts[1].AppliesTo(1, "/Satoshi:0.2.0/"));
+    BOOST_CHECK(!alerts[1].AppliesTo(1, "Outastra:0.1.0"));
+    BOOST_CHECK(!alerts[1].AppliesTo(1, "/Outastra:0.1.0"));
+    BOOST_CHECK(!alerts[1].AppliesTo(1, "Outastra:0.1.0/"));
+    BOOST_CHECK(!alerts[1].AppliesTo(-1, "/Outastra:0.1.0/"));
+    BOOST_CHECK(!alerts[1].AppliesTo(70002, "/Outastra:0.1.0/"));
+    BOOST_CHECK(!alerts[1].AppliesTo(1, "/Outastra:0.2.0/"));
 
-    BOOST_CHECK(!alerts[2].AppliesTo(1, "/Satoshi:0.3.0/"));
+    BOOST_CHECK(!alerts[2].AppliesTo(1, "/Outastra:0.3.0/"));
 
     SetMockTime(0);
 }
