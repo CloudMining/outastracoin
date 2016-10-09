@@ -39,10 +39,10 @@ namespace Checkpoints
         ;
     static const CCheckpointData data = {
         &mapCheckpoints,
-        1461845720, // * UNIX timestamp of last checkpoint block
-        501,    // * total number of transactions between genesis and last checkpoint
+        1475647068, // * UNIX timestamp of last checkpoint block
+        1,    // * total number of transactions between genesis and last checkpoint
                     //   (the tx=... number in the SetBestChain debug.log lines)
-        288     // * estimated number of transactions per day after checkpoint
+        1     // * estimated number of transactions per day after checkpoint
     };
 
     static MapCheckpoints mapCheckpointsTestnet =
@@ -73,8 +73,7 @@ namespace Checkpoints
 
         MapCheckpoints::const_iterator i = checkpoints.find(nHeight);
         if (i == checkpoints.end()) return true;
-        // return hash == i->second;
-      return true;
+        return hash == i->second;
     }
 
     // Guess how far we are in the verification process at the given block index
@@ -115,8 +114,7 @@ namespace Checkpoints
 
         const MapCheckpoints& checkpoints = *Checkpoints().mapCheckpoints;
 
-        // return mapCheckpoints.rbegin()->first;
-      return 0;
+        return mapCheckpoints.rbegin()->first;
     }
 
     CBlockIndex* GetLastCheckpoint(const std::map<uint256, CBlockIndex*>& mapBlockIndex)
@@ -131,8 +129,7 @@ namespace Checkpoints
             const uint256& hash = i.second;
             std::map<uint256, CBlockIndex*>::const_iterator t = mapBlockIndex.find(hash);
             if (t != mapBlockIndex.end())
-                // return t->second;
-            return NULL;
+            return t->second;
         }
         return NULL;
     }
