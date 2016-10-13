@@ -35,7 +35,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x598fbc584d577464c7255a971bc3f95924d1ace608096ec0afaa78a32f052a2d");
+uint256 hashGenesisBlock("0xcc1f91c66638b37bc03c5266a09bd4844296d4468eaa5fd7c063ee1364588834");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 11); // Outastracoin: starting difficulty (0.00000048)
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2795,7 +2795,7 @@ bool InitBlockIndex() {
         block.nVersion = 1;
         block.nTime    = 1475647068;
         block.nBits    = 0x1f01ffff;
-        block.nNonce   = 11447;
+        block.nNonce   = 27813;
 
         if (fTestNet)
         {
@@ -2851,7 +2851,7 @@ bool InitBlockIndex() {
 
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x944d24708817c553e65c1d9b92ad601101681def414aee35dff5aec082e62511"));
+        assert(block.hashMerkleRoot == uint256("0xfa3f63c94b764fad2b933b5cde2e997315fb9a4252f923e2a54fb644206fce3b"));
         block.print();
         assert(hash == hashGenesisBlock);
 
