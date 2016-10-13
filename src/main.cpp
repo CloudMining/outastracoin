@@ -36,7 +36,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x598fbc584d577464c7255a971bc3f95924d1ace608096ec0afaa78a32f052a2d");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Outastracoin: starting difficulty is 1 / 2^12
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 11); // Outastracoin: starting difficulty (0.00000048)
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -53,11 +53,11 @@ bool fTxIndex = false;
 unsigned int nCoinCacheSize = 5000;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
-int64 CTransaction::nMinTxFee = 100000;
+int64 CTransaction::nMinTxFee = 20000000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
-int64 CTransaction::nMinRelayTxFee = 100000;
+int64 CTransaction::nMinRelayTxFee = 20000000;
 
-CMedianFilter<int> cPeerBlockCounts(8, 0); // Amount of blocks that other nodes claim to have
+CMedianFilter<int> cPeerBlockCounts(5, 0); // Amount of blocks that other nodes claim to have
 
 map<uint256, CBlock*> mapOrphanBlocks;
 multimap<uint256, CBlock*> mapOrphanBlocksByPrev;
@@ -2481,7 +2481,7 @@ uint256 CPartialMerkleTree::ExtractMatches(std::vector<uint256> &vMatch) {
     if (nTransactions == 0)
         return 0;
     // check for excessively high numbers of transactions
-    if (nTransactions > MAX_BLOCK_SIZE / 60) // 60 is the lower bound for the size of a serialized CTransaction
+    if (nTransactions > MAX_BLOCK_SIZE / 100) // 100 is the lower bound for the size of a serialized CTransaction
         return 0;
     // there can never be more hashes provided than one for every txid
     if (vHash.size() > nTransactions)
@@ -2744,10 +2744,10 @@ bool LoadBlockIndex()
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0xfc;
-        pchMessageStart[1] = 0xc1;
-        pchMessageStart[2] = 0xb7;
-        pchMessageStart[3] = 0xdc;
+        pchMessageStart[0] = 0xcd;
+        pchMessageStart[1] = 0xf2;
+        pchMessageStart[2] = 0xc0;
+        pchMessageStart[3] = 0xef;
         hashGenesisBlock = uint256("0x598fbc584d577464c7255a971bc3f95924d1ace608096ec0afaa78a32f052a2d");
     }
 
@@ -2786,7 +2786,7 @@ bool InitBlockIndex() {
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 100 * COIN;
+        txNew.vout[0].nValue = 10 * COIN;
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
@@ -2794,13 +2794,13 @@ bool InitBlockIndex() {
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
         block.nTime    = 1475647068;
-        block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 510015504;
+        block.nBits    = 0x1f01ffff;
+        block.nNonce   = 11447;
 
         if (fTestNet)
         {
             block.nTime    = 1475647068;
-            block.nNonce   = 510015504;
+            block.nNonce   = 15504;
         }
 
         //// debug print
@@ -3124,7 +3124,7 @@ bool static AlreadyHave(const CInv& inv)
 // The message start string is designed to be unlikely to occur in normal data.
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
-unsigned char pchMessageStart[4] = { 0xfb, 0xc0, 0xb6, 0xdb }; // Outastracoin: increase each by adding 2 to bitcoin's value.
+unsigned char pchMessageStart[4] = { 0x70, 0x35, 0x22, 0x05 }; // Outastracoin: increase each by adding 2 to bitcoin's value.
 
 
 void static ProcessGetData(CNode* pfrom)
