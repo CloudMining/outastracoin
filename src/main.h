@@ -38,7 +38,7 @@ static const unsigned int MAX_STANDARD_TX_SIZE = 4000000;
 /** The maximum allowed number of signature check operations in a block (network rule) */
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
-static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
+static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 25;
 /** The maximum size of a blk?????.dat file (since 0.8) */
 static const unsigned int MAX_BLOCKFILE_SIZE = 0x8000000; // 128 MiB
 /** The pre-allocation chunk size for blk?????.dat files (since 0.8) */
@@ -52,14 +52,14 @@ static const int64 DUST_SOFT_LIMIT = 40000000; // 0.02 OAC
 /** Dust Hard Limit, ignored as wallet inputs (mininput default) */
 static const int64 DUST_HARD_LIMIT = 40000;   // 0.00002 OAC mininput
 /** No amount larger than this (in satoshi) is valid */
-static const int64 MAX_MONEY = 2000000000 * COIN;
+static const int64 MAX_MONEY = 642000000 * COIN;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
-static const int COINBASE_MATURITY = 10;
+static const int COINBASE_MATURITY = 40;
 /** Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp. */
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 /** Maximum number of script-checking threads allowed */
-static const int MAX_SCRIPTCHECK_THREADS = 11;
+static const int MAX_SCRIPTCHECK_THREADS = 33;
 #ifdef USE_UPNP
 static const int fHaveUPnP = true;
 #else
