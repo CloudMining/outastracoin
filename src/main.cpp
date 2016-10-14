@@ -36,7 +36,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0xcc1f91c66638b37bc03c5266a09bd4844296d4468eaa5fd7c063ee1364588834");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 11); // Outastracoin: starting difficulty (0.00000048)
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 64); // Outastracoin: starting difficulty (0.00000048)
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -53,9 +53,9 @@ bool fTxIndex = false;
 unsigned int nCoinCacheSize = 5000;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
-int64 CTransaction::nMinTxFee = 20000000;
+int64 CTransaction::nMinTxFee = 100000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
-int64 CTransaction::nMinRelayTxFee = 20000000;
+int64 CTransaction::nMinRelayTxFee = 1000;
 
 CMedianFilter<int> cPeerBlockCounts(5, 0); // Amount of blocks that other nodes claim to have
 
@@ -2781,26 +2781,26 @@ bool InitBlockIndex() {
         //   vMerkleTree: 97ddfbbae6
 
         // Genesis block
-        const char* pszTimestamp = "PL Times 12/04/2016 Jimmy Deadjim, Astral’s Visionary, Reborn at 23";
+        const char* pszTimestamp = "OutAstra";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 10 * COIN;
+        txNew.vout[0].nValue = 1 * COIN;
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1475647068;
+        block.nTime    = 1476418906;
         block.nBits    = 0x1f01ffff;
-        block.nNonce   = 27813;
+        block.nNonce   = 652527813;
 
         if (fTestNet)
         {
             block.nTime    = 1475647068;
-            block.nNonce   = 27813;
+            block.nNonce   = 127813;
         }
 
         //// debug print
