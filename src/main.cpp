@@ -36,7 +36,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0xd0d2d587a37b02b2f7fe6dd3b80cd646818db3b37375e0e00400519e4f97f04d");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 64); // Outastracoin: starting difficulty (0.00000048)
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // Outastracoin: starting difficulty (0.00000048)
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
