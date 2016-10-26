@@ -31,41 +31,74 @@ Development process
 Developers work in their own trees, then submit pull requests when they think
 their feature or bug fix is ready.
 
-If it is a simple/trivial/non-controversial change, then one of the Litecoin
-development team members simply pulls it.
+Compiling Linux Wallet on Ubuntu/Debian
+----------------------
 
-If it is a *more complicated or potentially controversial* change, then the patch
-submitter will be asked to start a discussion with the devs and community.
+Step 1. Install the depencies. 
 
-The patch will be accepted if there is broad consensus that it is a good thing.
-Developers should expect to rework and resubmit patches if the code doesn't
-match the project's coding conventions (see `doc/coding.txt`) or are
-controversial.
+```sudo add-apt-repository ppa:bitcoin/bitcoin```
 
-The `master` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/outastra/outastracoin-core/tags) are created
-regularly to indicate new official, stable release versions of Outastracoin.
+```sudo apt-get update```
 
-Testing
--------
+```sudo apt-get install libdb4.8-dev libdb4.8++-dev build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils git libboost-all-dev libminiupnpc-dev libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler libqrencode-dev```
 
-Testing and code review is the bottleneck for development; we get more pull
-requests than we can review and test. Please be patient and help out, and
-remember this is a security-critical project where any mistake might cost people
-lots of money.
+**Note**: If you are on debian, you will also need to `apt-get install libcanberra-gtk-module`.
 
-### Automated Testing
+Step 2. Clone the git repository and compile the daemon and gui wallet:
 
-Developers are strongly encouraged to write unit tests for new code, and to
-submit new unit tests for old code.
+```git clone https://github.com/outastra/outastracoin && cd outastracoin/src/leveldb && chmod +x build_detect_platform && TARGET_OS=Linux make libleveldb.a libmemenv.a && cd .. && make -f makefile.unix USE_UPNP=-```
 
-Unit tests for the core code are in `src/test/`. To compile and run them:
+```git clone https://github.com/outastra/outastracoin && cd outastracoin && qmake "USE_QRCODE=1" "USE_UPNP=1" "USE_IPV6=1" bitcoin-qt.pro
+ && make -f Makefile.Release```
 
-    cd src; make -f makefile.unix test
 
-Unit tests for the GUI code are in `src/qt/test/`. To compile and run them:
+Using the wallet:
+----
+The gui wallet is in ./outastracoin/src/qt and the daemon in ./outastracoin/src directories.
 
-    qmake BITCOIN_QT_TEST=1 -o Makefile.test bitcoin-qt.pro
-    make -f Makefile.test
-    ./outastracoin-qt_test
+**Note**: If you see something like 'Killed (program cc1plus)' run ```dmesg``` to see the error(s)/problems(s). This is most likely caused by running out of resources. You may need to add some RAM or add some swap space.
+
+**Optional**:
+If you want to copy the binaries for use by all users, run the following commands:
+
+```sudo cp src/outastracoind /usr/bin/```
+
+```sudo cp src/qt/outastracoin-qt /usr/bin/```
+
+Step 3. Creating a configuration file. Type ```cd ~``` to get back to the home folder and type:
+
+```outastracoind.exe```  (or ```./outastracoind``` if on mac or linux)
+
+the output from this command will tell you that you need to make a outastracoin.conf and will suggest some good starting values.
+
+For Linux users, type:
+ 
+```nano ~/.outastracoin/outastracoin.conf```
+(For Windows users, see below. For mac users, the command is ```nano ~/Library/Application\ Support\Outastracoin\outastracoin.conf```)
+    
+Paste the output from the `outastracoind` command into the outastracoin.conf like this: (It is recommended to change the password to something unique.)
+
+    rpcuser=outastracoinrpcuser
+    rpcpassword=85CpSuCNvDcYsdQU8w621mkQqJAimSQwCSJL5dPT9wQX
+    
+    
+**Optional**: Add `rpcport=33318` or `port=33317`.
+
+Add `daemon=1`. 
+
+Your config may look something like this:
+
+    rpcuser=outastracoinrpcuser
+    rpcpassword=85CpSuCNvDcYsdQU8w621mkQqJAimSQwCSJL5dPT9wQX
+    rpcport=33318
+    port=33317
+    daemon=1
+    algo=groestl
+
+Exit the outastracoin.conf by pressing `ctrl + x` on your keyboard then pressing `y` and hitting enter. This should have created a outastracoin.conf file with what you just added. 
+
+Type ```outastracoind.exe``` (or ```./outastracoind``` if on mac or linux) and your outastracoin daemon should start.
+
+To check the status of how much of the blockchain has been downloaded (aka synced) type `outastracoind.exe getinfo` (or `./outastracoind getinfo` if on mac or linux).
+
 
