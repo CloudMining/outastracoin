@@ -93,7 +93,6 @@ Your config may look something like this:
     rpcport=33318
     port=33317
     daemon=1
-    algo=groestl
 
 Exit the outastracoin.conf by pressing `ctrl + x` on your keyboard then pressing `y` and hitting enter. This should have created a outastracoin.conf file with what you just added. 
 
