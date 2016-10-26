@@ -3,8 +3,8 @@ Outastracoin integration/staging tree
 
 https://www.outastra.com
 
-Copyright (c) 2009-2014 Bitcoin Developers
-Copyright (c) 2011-2014 Litecoin Developers
+Copyright (c) 2009-2016 Bitcoin Developers
+Copyright (c) 2011-2016 Litecoin Developers
 Copyright (c) 2016 Outastracoin Developers
 
 What is Outastracoin?
