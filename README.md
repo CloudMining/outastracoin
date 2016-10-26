@@ -12,8 +12,8 @@ What is Outastracoin?
 
 Outastracoin is a alternatvie version of Bitcoin using scrypt just like Litecoin as a proof-of-work algorithm.
  - 5 minute block targets
- - ~524 million total coins
- - 100 coins per block
+ - ~84 million total coins
+ - 7 coins per block
  - 2016 blocks to retarget difficulty
 
 For more information, as well as an immediately useable, binary version of
