@@ -34,10 +34,10 @@ const std::string CLIENT_NAME("OutastracoinClient");
 #endif
 
 // git will put "#define GIT_ARCHIVE 1" on the next line inside archives. 
-#define GIT_ARCHIVE 1
+#define GIT_ARCHIVE 2
 #ifdef GIT_ARCHIVE
-#    define GIT_COMMIT_ID "4f691a9"
-#    define GIT_COMMIT_DATE "Wed, 13 Apr 2016 03:50:54 +0200"
+#    define GIT_COMMIT_ID "42582e4"
+#    define GIT_COMMIT_DATE "Sun, 9 Oct 2016 16:11:40 +0200"
 #endif
 
 #define BUILD_DESC_FROM_COMMIT(maj,min,rev,build,commit) \
