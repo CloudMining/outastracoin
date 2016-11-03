@@ -14,7 +14,7 @@ Outastracoin is a alternatvie version of Bitcoin using scrypt just like Litecoin
  - 5 minute block targets
  - ~84 million total coins
  - 7 coins per block
- - 2016 blocks to retarget difficulty
+ - 288 blocks to retarget difficulty
 
 For more information, as well as an immediately useable, binary version of
 the Outastracoin client sofware, see https://www.outastra.com.
