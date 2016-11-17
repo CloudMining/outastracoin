@@ -35,7 +35,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x5eb15a763277a882671a9838526c973d91dcd8c7d97f8002ce5dfc7719ef789c");
+uint256 hashGenesisBlock("0x0000000043c6ea738999afc46ac381524c88cad354a3be06c3b3e2719f14a6d6");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); 
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2787,15 +2787,15 @@ bool InitBlockIndex() {
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         txNew.vout[0].nValue = 7 * COIN;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f") << OP_CHECKSIG;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1477488637;
+        block.nTime    = 1479398687;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 20518009;
+        block.nNonce   = 1936784175;
 
         if (fTestNet)
         {
@@ -2851,7 +2851,7 @@ bool InitBlockIndex() {
 
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x77ed96d974b25904bed072b1d8d20c6ea2f429cf21379627447ffe4a3cfec07e"));
+        assert(block.hashMerkleRoot == uint256("0x47a1cb10af5b14f6cc24470d74849d28006ccc7a49a76a1b67d238cf5df0bafb"));
         block.print();
         assert(hash == hashGenesisBlock);
 
