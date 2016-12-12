@@ -36,9 +36,9 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x5027ec082e7f319b64f54e6faaa10b8a8877f3d62d7bdb27f983f78d3f0499bf");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 200); 
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); 
 CBlockIndex* pindexGenesisBlock = NULL;
-int nBestHeight = 0;
+int nBestHeight = -1;
 uint256 nBestChainWork = 0;
 uint256 nBestInvalidWork = 0;
 uint256 hashBestChain = 0;
@@ -53,9 +53,9 @@ bool fTxIndex = false;
 unsigned int nCoinCacheSize = 5000;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
-int64 CTransaction::nMinTxFee = 10000000;
+int64 CTransaction::nMinTxFee = 100000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
-int64 CTransaction::nMinRelayTxFee = 100000;
+int64 CTransaction::nMinRelayTxFee = 1000;
 
 CMedianFilter<int> cPeerBlockCounts(5, 0); // Amount of blocks that other nodes claim to have
 
@@ -1090,7 +1090,7 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
     int64 nSubsidy = 7 * COIN;
 
     if(nHeight < 0) 
-        nSubsidy = 0;
+        nSubsidy = 1;
     if(nHeight > 1) 
         nSubsidy = 1;
 
@@ -4845,3 +4845,4 @@ public:
         mapOrphanTransactions.clear();
     }
 } instance_of_cmaincleanup;
+
