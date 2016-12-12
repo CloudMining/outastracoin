@@ -21,13 +21,13 @@
 #include <miniupnpc/upnperrors.h>
 #endif
 
-// Dump addresses to peers.dat every 15 minutes (900s)
-#define DUMP_ADDRESSES_INTERVAL 900
+// Dump addresses to peers.dat every 30 minutes (1800s)
+#define DUMP_ADDRESSES_INTERVAL 1800
 
 using namespace std;
 using namespace boost;
 
-static const int MAX_OUTBOUND_CONNECTIONS = 8;
+static const int MAX_OUTBOUND_CONNECTIONS = 16;
 
 bool OpenNetworkConnection(const CAddress& addrConnect, CSemaphoreGrant *grantOutbound = NULL, const char *strDest = NULL, bool fOneShot = false);
 
@@ -1173,16 +1173,14 @@ void MapPort(bool)
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strMainNetDNSSeed[][2] = {
-    {"node.outastra.com", "a.node.outastra.com"},
-    {"b.node.outastra.com", "c.node.outastra.com"},
-    {"d.node.outastra.com", "nodex.outastra.com"},
+    {"outastra.com", "dnsseed.outastra.com"},
+    {"outastracoin.pro", "dnsseed.outastracoin.pro"},
     {NULL, NULL}
 };
 
 static const char *strTestNetDNSSeed[][2] = {
-    {"node.outastra.com", "a.node.outastra.com"},
-    {"b.node.outastra.com", "c.node.outastra.com"},
-    {"d.node.outastra.com", "nodex.outastra.com"},
+    {"testnet.outastra.com", "testnet.dnsseed.outastra.com"},
+    {"testnet.outastracoin.pro", "testnet.dnsseed.outastracoin.pro"},
     {NULL, NULL}
 };
 
