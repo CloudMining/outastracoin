@@ -36,7 +36,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x0000000043c6ea738999afc46ac381524c88cad354a3be06c3b3e2719f14a6d6");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); 
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 200); 
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -53,9 +53,9 @@ bool fTxIndex = false;
 unsigned int nCoinCacheSize = 5000;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
-int64 CTransaction::nMinTxFee = 100000;
+int64 CTransaction::nMinTxFee = 1000000000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
-int64 CTransaction::nMinRelayTxFee = 1000;
+int64 CTransaction::nMinRelayTxFee = 10000000;
 
 CMedianFilter<int> cPeerBlockCounts(5, 0); // Amount of blocks that other nodes claim to have
 
@@ -74,7 +74,7 @@ double dHashesPerSec = 0.0;
 int64 nHPSTimerStart = 0;
 
 // Settings
-int64 nTransactionFee = 0;
+int64 nTransactionFee = 100;
 int64 nMinimumInputValue = DUST_HARD_LIMIT;
 
 
