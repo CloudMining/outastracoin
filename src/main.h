@@ -40,11 +40,11 @@ static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
 static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 5000;
 /** The maximum size of a blk?????.dat file (since 0.8) */
-static const unsigned int MAX_BLOCKFILE_SIZE = 134217728; // 128 MiB
+static const unsigned int MAX_BLOCKFILE_SIZE = 0x8000000; // 128 MiB
 /** The pre-allocation chunk size for blk?????.dat files (since 0.8) */
-static const unsigned int BLOCKFILE_CHUNK_SIZE = 16777216; // 16 MiB
+static const unsigned int BLOCKFILE_CHUNK_SIZE = 0x1000000; // 16 MiB
 /** The pre-allocation chunk size for rev?????.dat files (since 0.8) */
-static const unsigned int UNDOFILE_CHUNK_SIZE = 1048576; // 1 MiB
+static const unsigned int UNDOFILE_CHUNK_SIZE = 0x100000; // 1 MiB
 /** Fake height value used in CCoins to signify they are only in the memory pool (since 0.8) */
 static const unsigned int MEMPOOL_HEIGHT = 0x7FFFFFFF;
 /** Dust Soft Limit, allowed with additional fee per output */
@@ -52,10 +52,10 @@ static const int64 DUST_SOFT_LIMIT = 100000; // 0.01 OAC
 /** Dust Hard Limit, ignored as wallet inputs (mininput default) */
 static const int64 DUST_HARD_LIMIT = 1000;   // 0.00001 OAC mininput
 /** No amount larger than this (in satoshi) is valid */
-static const int64 MAX_MONEY = 1755600000000000;
+static const int64 MAX_MONEY = 17556000 * COIN;
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 /** Coinbase transaction outputs can only be spent after this number of new blocks (network rule) */
-static const int COINBASE_MATURITY = 42;
+static const int COINBASE_MATURITY = 20;
 /** Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp. */
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
 /** Maximum number of script-checking threads allowed */
