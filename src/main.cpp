@@ -2865,7 +2865,7 @@ if (true && block.GetHash() != hashGenesisBlock)
 
 {
 
-printf(«Searching for genesis block…\n»);
+printf("Searching for genesis block…\n");
 
 // This will figure out a valid hash and Nonce if you’re
 
@@ -2919,7 +2919,7 @@ if ((block.nNonce & 0xFFF) == 0)
 
 {
 
-printf(«nonce %08X: hash = %s (target = %s)\n», block.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+printf("nonce %08X: hash = %s (target = %s)\n", block.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
 
 }
 
@@ -2929,7 +2929,7 @@ if (block.nNonce == 0)
 
 {
 
-printf(«NONCE WRAPPED, incrementing time\n»);
+printf("NONCE WRAPPED, incrementing time\n");
 
 ++block.nTime;
 
@@ -2937,11 +2937,11 @@ printf(«NONCE WRAPPED, incrementing time\n»);
 
 }
 
-printf(«block.nTime = %u \n», block.nTime);
+printf("block.nTime = %u \n", block.nTime);
 
-printf(«block.nNonce = %u \n», block.nNonce);
+printf("block.nNonce = %u \n", block.nNonce);
 
-printf(«block.GetHash = %s\n», block.GetHash().ToString().c_str());
+printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
 
 }
 
