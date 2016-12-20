@@ -35,8 +35,8 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0xa6d4505ad04c13ffcc1507bd5daf1602fa18fbe768cd5a9669a15047ea0e9626");
-static CBigNum bnProofOfWorkLimit = CBigNum().SetCompact(457179072); // Outastracoin: starting difficulty is 1 / 2^12
+uint256 hashGenesisBlock("0xd8affd58943a41b8e326a9293034b5336125f8eabb55c95cd651c9a8bc055aeb");
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // outastracoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -57,7 +57,7 @@ int64 CTransaction::nMinTxFee = 2000000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
 int64 CTransaction::nMinRelayTxFee = 2000000;
 
-CMedianFilter<int> cPeerBlockCounts(8, 0); // Amount of blocks that other nodes claim to have
+CMedianFilter<int> cPeerBlockCounts(3, 0); // Amount of blocks that other nodes claim to have
 
 map<uint256, CBlock*> mapOrphanBlocks;
 multimap<uint256, CBlock*> mapOrphanBlocksByPrev;
@@ -613,19 +613,14 @@ int64 CTransaction::GetMinFee(unsigned int nBlockSize, bool fAllowFree,
 
     if (fAllowFree)
     {
-        if (nBlockSize == 1)
-        {
-            // Transactions under 10K are free
-            // (about 4500 BTC if made of 50 BTC inputs)
-            if (nBytes < 100000)
-                nMinFee = 0;
-        }
-        else
-        {
-            // Free transaction area
-            if (nNewBlockSize < 27000)
-                nMinFee = 0;
-        }
+        // There is a free transaction area in blocks created by most miners,
+        // * If we are relaying we allow transactions up to DEFAULT_BLOCK_PRIORITY_SIZE - 1000
+        //   to be considered to fall into this category. We don't want to encourage sending
+        //   multiple transactions instead of one big transaction to avoid fees.
+        // * If we are creating a transaction we allow transactions up to 5,000 bytes
+        //   to be considered safe and assume they can likely make it into this section.
+        if (nBytes < (mode == GMF_SEND ? 5000 : (DEFAULT_BLOCK_PRIORITY_SIZE - 1000)))
+            nMinFee = 0;
     }
 
     // Outastracoin
@@ -950,7 +945,7 @@ int CMerkleTx::GetBlocksToMaturity() const
 {
     if (!IsCoinBase())
         return 0;
-    return max(0, (COINBASE_MATURITY) - GetDepthInMainChain());
+    return max(0, (COINBASE_MATURITY+20) - GetDepthInMainChain());
 }
 
 
@@ -1092,16 +1087,16 @@ uint256 static GetOrphanRoot(const CBlockHeader* pblock)
 
 int64 static GetBlockValue(int nHeight, int64 nFees)
 {
-    int64 nSubsidy = 3300000000;
+    int64 nSubsidy = 33 * COIN;
 
     // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
-    nSubsidy >>= (nHeight / 266000); // Outastracoin: 840k blocks in ~4 years
+    nSubsidy >>= (nHeight / 3); // Outastracoin: 840k blocks in ~4 years
 
     return nSubsidy + nFees;
 }
 
-static const int64 nTargetTimespan = 30; // Outastracoin: 3.5 days
-static const int64 nTargetSpacing = 30; // Outastracoin: 2.5 minutes
+static const int64 nTargetTimespan = 1 * 30; // Outastracoin: 0.5 minutes
+static const int64 nTargetSpacing = 1 * 30; // Outastracoin: 0.5 minutes
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
 //
@@ -2107,24 +2102,6 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return state.DoS(100, error("CheckBlock() : size limits failed"));
 
-    // Outastracoin: Special short-term limits to avoid 10,000 BDB lock limit:
-    if (GetBlockTime() < 1376568000)  // stop enforcing 15 August 2013 00:00:00
-    {
-        // Rule is: #unique txids referenced <= 4,500
-        // ... to prevent 10,000 BDB lock exhaustion on old clients
-        set<uint256> setTxIn;
-        for (size_t i = 0; i < vtx.size(); i++)
-        {
-            setTxIn.insert(vtx[i].GetHash());
-            if (i == 0) continue; // skip coinbase txin
-            BOOST_FOREACH(const CTxIn& txin, vtx[i].vin)
-                setTxIn.insert(txin.prevout.hash);
-        }
-        size_t nTxids = setTxIn.size();
-        if (nTxids > 4500)
-            return error("CheckBlock() : 15 August maxlocks violation");
-    }
-
     // Check proof of work matches claimed amount
     if (fCheckPOW && !CheckProofOfWork(GetPoWHash(), nBits))
         return state.DoS(50, error("CheckBlock() : proof of work failed"));
@@ -2216,8 +2193,8 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         // Reject block.nVersion=1 blocks (mainnet >= 710000, testnet >= 400000)
         if (nVersion < 2)
         {
-            if ((!fTestNet && CBlockIndex::IsSuperMajority(2, pindexPrev, 950, 1000)) ||
-                (fTestNet && CBlockIndex::IsSuperMajority(2, pindexPrev, 75, 100)))
+            if ((!fTestNet && nHeight >= 710000) ||
+               (fTestNet && nHeight >= 400000))
             {
                 return state.Invalid(error("AcceptBlock() : rejected nVersion=1 block"));
             }
@@ -2225,9 +2202,8 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
         // Enforce block.nVersion=2 rule that the coinbase starts with serialized block height
         if (nVersion >= 2)
         {
-            // if 750 of the last 1,000 blocks are version 2 or greater (51/100 if testnet):
-            if ((!fTestNet && CBlockIndex::IsSuperMajority(2, pindexPrev, 750, 1000)) ||
-                (fTestNet && CBlockIndex::IsSuperMajority(2, pindexPrev, 51, 100)))
+            if ((!fTestNet && nHeight >= 710000) ||
+               (fTestNet && nHeight >= 400000))
             {
                 CScript expect = CScript() << nHeight;
                 if (vtx[0].vin[0].scriptSig.size() < expect.size() ||
@@ -2260,7 +2236,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
     {
         LOCK(cs_vNodes);
         BOOST_FOREACH(CNode* pnode, vNodes)
-            if (nBestHeight > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : nBlockEstimate))
+            if (nBestHeight > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 20 : nBlockEstimate))
                 pnode->PushInventory(CInv(MSG_BLOCK, hash));
     }
 
@@ -2485,7 +2461,7 @@ uint256 CPartialMerkleTree::ExtractMatches(std::vector<uint256> &vMatch) {
     if (nTransactions == 0)
         return 0;
     // check for excessively high numbers of transactions
-    if (nTransactions > MAX_BLOCK_SIZE / 60) // 100 is the lower bound for the size of a serialized CTransaction
+    if (nTransactions > MAX_BLOCK_SIZE / 60) // 60 is the lower bound for the size of a serialized CTransaction
         return 0;
     // there can never be more hashes provided than one for every txid
     if (vHash.size() > nTransactions)
@@ -2752,7 +2728,7 @@ bool LoadBlockIndex()
         pchMessageStart[1] = 0xc1;
         pchMessageStart[2] = 0xb7;
         pchMessageStart[3] = 0xdc;
-        hashGenesisBlock = uint256("0x0c94425ecd15cdde66da98006b8bf752b01c38095a60a91ffeb0294068f3b70a");
+        hashGenesisBlock = uint256("0x436728b47def9ce6868157ff8efa90fd277daa4c935065a5cede763e69ec193f");
     }
 
     //
@@ -2785,26 +2761,26 @@ bool InitBlockIndex() {
         //   vMerkleTree: 97ddfbbae6
 
         // Genesis block
-        const char* pszTimestamp = "OutAstra855c40369f7ea541d05400f1fab040b133efd52cf098f30ff2a6a245ade27777";
+        const char* pszTimestamp = "20 Dec 2016 05:58:47 UTC OutAstra";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 3300000000;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("fa60aa222a33d1f9513b3f97397ab7a5be9cf389f0c9413a88f59fe8d24b504a4019e0e77897503c606aa97879154f78c2f51a5cf9dc44ef6a3240496ef2a8934b") << OP_CHECKSIG;
+        txNew.vout[0].nValue = 33 * COIN;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04f27731aa06febf844fa2de9834da9deaba41d03efb2d5bb571edfc0d3c71957611c52fe2d0b7cff9aeb12945194d172ec6a4c2f8d83a54532cfec44de26bd9f3") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1481575114;
-        block.nBits    = 457179072;
-        block.nNonce   = 520539111;
+        block.nTime    = 1482213527;
+        block.nBits    = 0x1e0ffff0;
+        block.nNonce   = 523063579;
 
         if (fTestNet)
         {
-            block.nTime    = 1481575114;
-            block.nNonce   = 1182638555;
+            block.nTime    = 1482213528;
+            block.nNonce   = 1186569523;
         }
 
         //// debug print
@@ -2855,8 +2831,99 @@ bool InitBlockIndex() {
 
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0xb21636a8ec1305aee77a9cbf4db751afcf91be01521e1a81d28b64f7764c92f0"));
+        assert(block.hashMerkleRoot == uint256("0xc05b15461f92fd85e9f2130125ca3446b540a9a6f87ab7b5d02051e636cf2fad"));
         block.print();
+        //=====
+
+// If genesis block hash does not match, then generate new genesis hash.
+
+if (true && block.GetHash() != hashGenesisBlock)
+
+{
+
+printf("Searching for genesis block…\n");
+
+// This will figure out a valid hash and Nonce if you’re
+
+// creating a different genesis block:
+
+uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+
+uint256 thash;
+
+char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+
+ 
+
+loop
+
+{
+
+#if defined(USE_SSE2)
+
+// Detection would work, but in cases where we KNOW it always has SSE2,
+
+// it is faster to use directly than to use a function pointer or conditional.
+
+#if defined(_M_X64) || defined(__x86_64__) || defined(_M_AMD64) || (defined(MAC_OSX) && defined(__i386__))
+
+// Always SSE2: x86_64 or Intel MacOS X
+
+scrypt_1024_1_1_256_sp_sse2(BEGIN(block.nVersion), BEGIN(thash), scratchpad);
+
+#else
+
+// Detect SSE2: 32bit x86 Linux or Windows
+
+scrypt_1024_1_1_256_sp(BEGIN(block.nVersion), BEGIN(thash), scratchpad);
+
+#endif
+
+#else
+
+// Generic scrypt
+
+scrypt_1024_1_1_256_sp_generic(BEGIN(block.nVersion), BEGIN(thash), scratchpad);
+
+#endif
+
+if (thash <= hashTarget)
+
+break;
+
+if ((block.nNonce & 0xFFF) == 0)
+
+{
+
+printf("nonce %08X: hash = %s (target = %s)\n", block.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+
+}
+
+++block.nNonce;
+
+if (block.nNonce == 0)
+
+{
+
+printf("NONCE WRAPPED, incrementing time\n");
+
+++block.nTime;
+
+}
+
+}
+
+printf("block.nTime = %u \n", block.nTime);
+
+printf("block.nNonce = %u \n", block.nNonce);
+
+printf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
+
+}
+
+ 
+
+//=====
         assert(hash == hashGenesisBlock);
 
         // Start new block file
@@ -3049,7 +3116,7 @@ string GetWarnings(string strFor)
         strRPC = "test";
 
     if (!CLIENT_VERSION_IS_RELEASE)
-        strStatusBar = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
+        strStatusBar = _("This is a pre-release test build - use at your own risk");
 
     // Misc warnings like out of disk space and clock is wrong
     if (strMiscWarning != "")
@@ -4849,4 +4916,5 @@ public:
         mapOrphanTransactions.clear();
     }
 } instance_of_cmaincleanup;
+
 
