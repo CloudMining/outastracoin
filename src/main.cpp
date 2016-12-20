@@ -36,7 +36,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0xc3b93f17283dad385a4b28f1589568afad5e2cf2d27cbb61c1ff7c1b0fdac0a6");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // outastracoin: starting difficulty is 1 / 2^12
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 48); // outastracoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -45,7 +45,7 @@ uint256 hashBestChain = 0;
 CBlockIndex* pindexBest = NULL;
 set<CBlockIndex*, CBlockIndexWorkComparator> setBlockIndexValid; // may contain all CBlockIndex*'s that have validness >=BLOCK_VALID_TRANSACTIONS, and must contain those who aren't failed
 int64 nTimeBestReceived = 0;
-int nScriptCheckThreads = 0;
+int nScriptCheckThreads = 16;
 bool fImporting = false;
 bool fReindex = false;
 bool fBenchmark = false;
@@ -57,7 +57,7 @@ int64 CTransaction::nMinTxFee = 2000000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
 int64 CTransaction::nMinRelayTxFee = 2000000;
 
-CMedianFilter<int> cPeerBlockCounts(8, 0); // Amount of blocks that other nodes claim to have
+CMedianFilter<int> cPeerBlockCounts(3, 0); // Amount of blocks that other nodes claim to have
 
 map<uint256, CBlock*> mapOrphanBlocks;
 multimap<uint256, CBlock*> mapOrphanBlocksByPrev;
@@ -74,7 +74,7 @@ double dHashesPerSec = 0.0;
 int64 nHPSTimerStart = 0;
 
 // Settings
-int64 nTransactionFee = 0;
+int64 nTransactionFee = 2000000;
 int64 nMinimumInputValue = DUST_HARD_LIMIT;
 
 
@@ -945,7 +945,7 @@ int CMerkleTx::GetBlocksToMaturity() const
 {
     if (!IsCoinBase())
         return 0;
-    return max(0, (COINBASE_MATURITY+20) - GetDepthInMainChain());
+    return max(0, (COINBASE_MATURITY+1) - GetDepthInMainChain());
 }
 
 
@@ -1090,12 +1090,12 @@ int64 static GetBlockValue(int nHeight, int64 nFees)
     int64 nSubsidy = 33 * COIN;
 
     // Subsidy is cut in half every 840000 blocks, which will occur approximately every 4 years
-    nSubsidy >>= (nHeight / 266000); // Outastracoin: 840k blocks in ~4 years
+    nSubsidy >>= (nHeight / 3); // Outastracoin: 840k blocks in ~4 years
 
     return nSubsidy + nFees;
 }
 
-static const int64 nTargetTimespan = 1 * 60 * 60; // Outastracoin: 1 hour
+static const int64 nTargetTimespan = 1 * 30; // Outastracoin: 0.5 minutes
 static const int64 nTargetSpacing = 1 * 30; // Outastracoin: 0.5 minutes
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
@@ -1114,10 +1114,10 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
     bnResult.SetCompact(nBase);
     while (nTime > 0 && bnResult < bnProofOfWorkLimit)
     {
-        // Maximum 400% adjustment...
-        bnResult *= 4;
-        // ... in best-case exactly 4-times-normal target time
-        nTime -= nTargetTimespan*4;
+        // Maximum 200% adjustment...
+        bnResult *= 2;
+        // ... in best-case exactly 2-times-normal target time
+        nTime -= nTargetTimespan*2;
     }
     if (bnResult > bnProofOfWorkLimit)
         bnResult = bnProofOfWorkLimit;
@@ -1170,10 +1170,10 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
     printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
-    if (nActualTimespan < nTargetTimespan/4)
-        nActualTimespan = nTargetTimespan/4;
-    if (nActualTimespan > nTargetTimespan*4)
-        nActualTimespan = nTargetTimespan*4;
+    if (nActualTimespan < nTargetTimespan/2)
+        nActualTimespan = nTargetTimespan/2;
+    if (nActualTimespan > nTargetTimespan*2)
+        nActualTimespan = nTargetTimespan*2;
 
     // Retarget
     CBigNum bnNew;
@@ -2102,24 +2102,6 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return state.DoS(100, error("CheckBlock() : size limits failed"));
 
-    // Outastracoin: Special short-term limits to avoid 10,000 BDB lock limit:
-    if (GetBlockTime() < 1376568000)  // stop enforcing 15 August 2013 00:00:00
-    {
-        // Rule is: #unique txids referenced <= 4,500
-        // ... to prevent 10,000 BDB lock exhaustion on old clients
-        set<uint256> setTxIn;
-        for (size_t i = 0; i < vtx.size(); i++)
-        {
-            setTxIn.insert(vtx[i].GetHash());
-            if (i == 0) continue; // skip coinbase txin
-            BOOST_FOREACH(const CTxIn& txin, vtx[i].vin)
-                setTxIn.insert(txin.prevout.hash);
-        }
-        size_t nTxids = setTxIn.size();
-        if (nTxids > 4500)
-            return error("CheckBlock() : 15 August maxlocks violation");
-    }
-
     // Check proof of work matches claimed amount
     if (fCheckPOW && !CheckProofOfWork(GetPoWHash(), nBits))
         return state.DoS(50, error("CheckBlock() : proof of work failed"));
@@ -2254,7 +2236,7 @@ bool CBlock::AcceptBlock(CValidationState &state, CDiskBlockPos *dbp)
     {
         LOCK(cs_vNodes);
         BOOST_FOREACH(CNode* pnode, vNodes)
-            if (nBestHeight > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : nBlockEstimate))
+            if (nBestHeight > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 20 : nBlockEstimate))
                 pnode->PushInventory(CInv(MSG_BLOCK, hash));
     }
 
@@ -2779,25 +2761,25 @@ bool InitBlockIndex() {
         //   vMerkleTree: 97ddfbbae6
 
         // Genesis block
-        const char* pszTimestamp = "OutAstra855c40369f7ea541d05400f1fab040b133efd52cf098f30ff2a6a245ade27777";
+        const char* pszTimestamp = "20 Dec 2016 05:58:47 UTC OutAstra";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
-        txNew.vin[0].scriptSig = CScript() << 504365040 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+        txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         txNew.vout[0].nValue = 33 * COIN;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("04f27731aa06febf844fa2de9834da9deaba41d03efb2d5bb571edfc0d3c71957611c52fe2d0b7cff9aeb12945194d172ec6a4c2f8d83a54532cfec44de26bd9f3") << OP_CHECKSIG;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1481982616;
+        block.nTime    = 1482213527;
         block.nBits    = 0x1e0ffff0;
         block.nNonce   = 522202263;
 
         if (fTestNet)
         {
-            block.nTime    = 1481575114;
+            block.nTime    = 1482213528;
             block.nNonce   = 1184853440;
         }
 
@@ -3134,7 +3116,7 @@ string GetWarnings(string strFor)
         strRPC = "test";
 
     if (!CLIENT_VERSION_IS_RELEASE)
-        strStatusBar = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
+        strStatusBar = _("This is a pre-release test build - use at your own risk");
 
     // Misc warnings like out of disk space and clock is wrong
     if (strMiscWarning != "")
