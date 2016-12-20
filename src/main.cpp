@@ -945,7 +945,7 @@ int CMerkleTx::GetBlocksToMaturity() const
 {
     if (!IsCoinBase())
         return 0;
-    return max(0, (COINBASE_MATURITY+1) - GetDepthInMainChain());
+    return max(0, (COINBASE_MATURITY+20) - GetDepthInMainChain());
 }
 
 
@@ -1114,10 +1114,10 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
     bnResult.SetCompact(nBase);
     while (nTime > 0 && bnResult < bnProofOfWorkLimit)
     {
-        // Maximum 200% adjustment...
-        bnResult *= 2;
-        // ... in best-case exactly 2-times-normal target time
-        nTime -= nTargetTimespan*2;
+        // Maximum 400% adjustment...
+        bnResult *= 4;
+        // ... in best-case exactly 4-times-normal target time
+        nTime -= nTargetTimespan*4;
     }
     if (bnResult > bnProofOfWorkLimit)
         bnResult = bnProofOfWorkLimit;
@@ -1170,10 +1170,10 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
     printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
-    if (nActualTimespan < nTargetTimespan/2)
-        nActualTimespan = nTargetTimespan/2;
-    if (nActualTimespan > nTargetTimespan*2)
-        nActualTimespan = nTargetTimespan*2;
+    if (nActualTimespan < nTargetTimespan/4)
+        nActualTimespan = nTargetTimespan/4;
+    if (nActualTimespan > nTargetTimespan*4)
+        nActualTimespan = nTargetTimespan*4;
 
     // Retarget
     CBigNum bnNew;
