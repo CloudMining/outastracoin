@@ -35,7 +35,7 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0xc3b93f17283dad385a4b28f1589568afad5e2cf2d27cbb61c1ff7c1b0fdac0a6");
+uint256 hashGenesisBlock("0xcf996543df211c4519a22aac08c9234e270618fb8ae93e7dd4f12ab3f531571c");
 static CBigNum bnProofOfWorkLimit(~uint256(0) >> 48); // outastracoin: starting difficulty is 1 / 2^12
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
@@ -2728,7 +2728,7 @@ bool LoadBlockIndex()
         pchMessageStart[1] = 0xc1;
         pchMessageStart[2] = 0xb7;
         pchMessageStart[3] = 0xdc;
-        hashGenesisBlock = uint256("0x0ccec61b1d4db2956f89fba9888e3c6aa7cb538eb774e9b7f204c757d0436103");
+        hashGenesisBlock = uint256("0x26cda0e5f61079de16307fee6f93e94761617ac4453cc7d5bdb61e708d3043af");
     }
 
     //
@@ -2775,12 +2775,12 @@ bool InitBlockIndex() {
         block.nVersion = 1;
         block.nTime    = 1482213527;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 522202263;
+        block.nNonce   = 522448635;
 
         if (fTestNet)
         {
             block.nTime    = 1482213528;
-            block.nNonce   = 1184853440;
+            block.nNonce   = 1185827820;
         }
 
         //// debug print
@@ -2831,7 +2831,7 @@ bool InitBlockIndex() {
 
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x58c90990e3da6cf5a4002a5898bf532ec71debdb0371f13424ba9dcb2309b646"));
+        assert(block.hashMerkleRoot == uint256("0x9088eff03b9f177cb99a15230148d8e9128bbce69d71a67150bbd64bc21cfc90"));
         block.print();
         //=====
 
