@@ -36,7 +36,7 @@ unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
 uint256 hashGenesisBlock("0x");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 32); // outastracoin: starting difficulty is 1
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // outastracoin: starting difficulty is 1
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -57,7 +57,7 @@ int64 CTransaction::nMinTxFee = 10000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
 int64 CTransaction::nMinRelayTxFee = 10000;
 
-CMedianFilter<int> cPeerBlockCounts(8, 0); // Amount of blocks that other nodes claim to have
+CMedianFilter<int> cPeerBlockCounts(5, 0); // Amount of blocks that other nodes claim to have
 
 map<uint256, CBlock*> mapOrphanBlocks;
 multimap<uint256, CBlock*> mapOrphanBlocksByPrev;
@@ -2761,7 +2761,7 @@ bool InitBlockIndex() {
         //   vMerkleTree: 97ddfbbae6
 
         // Genesis block
-        const char* pszTimestamp = "20 Dec 2016 05:58:47 UTC OutAstra";
+        const char* pszTimestamp = "Czwartek, 22 gru 2016 17:33:00 OutAstra";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -2773,8 +2773,8 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1482213527;
-        block.nBits    = 0x1d00ffff;
+        block.nTime    = 1482424380;
+        block.nBits    = 0x1e0ffff0;
         block.nNonce   = 525098;
 
         if (fTestNet)
