@@ -12,9 +12,9 @@ What is Outastracoin?
 
 Outastracoin is a alternatvie version of Bitcoin using scrypt just like Litecoin as a proof-of-work algorithm.
  - 5 minute block targets
- - ~84 million total coins
- - 7 coins per block
- - 288 blocks to retarget difficulty
+ - ~640 million total coins
+ - 5 coins per block
+ - 576 blocks to retarget difficulty
 
 For more information, as well as an immediately useable, binary version of
 the Outastracoin client sofware, see https://www.outastra.com.
@@ -36,13 +36,15 @@ Compiling Linux Wallet on Ubuntu/Debian
 
 Step 1. Install the depencies. 
 
+```sudo apt-get install software-properties-common```
+
 ```sudo add-apt-repository ppa:bitcoin/bitcoin```
 
 ```sudo apt-get update```
 
 ```sudo apt-get install libdb4.8-dev libdb4.8++-dev build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils git libboost-all-dev libminiupnpc-dev libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler libqrencode-dev```
 
-**Note**: If you are on debian, you will also need to `apt-get install libcanberra-gtk-module`.
+**Note**: If you are on debian, you will also need to `sudo apt-get install libcanberra-gtk-module`.
 
 Step 2. Clone the git repository and compile the daemon and gui wallet:
 

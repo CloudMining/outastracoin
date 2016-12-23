@@ -35,8 +35,8 @@ CTxMemPool mempool;
 unsigned int nTransactionsUpdated = 0;
 
 map<uint256, CBlockIndex*> mapBlockIndex;
-uint256 hashGenesisBlock("0x7466e5653447d3b4141da4ef9fe921fb5598627c63cd4c5728e0dac27c337b4a");
-static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // outastracoin: starting difficulty is 1 / 2^12
+uint256 hashGenesisBlock("0xf50e7a25b0b380c8b0f32e308feba4c97d4ed6b62504303212b8c573bd28b1bc");
+static CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // outastracoin: starting difficulty is 1
 CBlockIndex* pindexGenesisBlock = NULL;
 int nBestHeight = -1;
 uint256 nBestChainWork = 0;
@@ -53,11 +53,11 @@ bool fTxIndex = false;
 unsigned int nCoinCacheSize = 5000;
 
 /** Fees smaller than this (in satoshi) are considered zero fee (for transaction creation) */
-int64 CTransaction::nMinTxFee = 2000000;
+int64 CTransaction::nMinTxFee = 10000;
 /** Fees smaller than this (in satoshi) are considered zero fee (for relaying) */
-int64 CTransaction::nMinRelayTxFee = 2000000;
+int64 CTransaction::nMinRelayTxFee = 10000;
 
-CMedianFilter<int> cPeerBlockCounts(3, 0); // Amount of blocks that other nodes claim to have
+CMedianFilter<int> cPeerBlockCounts(5, 0); // Amount of blocks that other nodes claim to have
 
 map<uint256, CBlock*> mapOrphanBlocks;
 multimap<uint256, CBlock*> mapOrphanBlocksByPrev;
@@ -1087,16 +1087,16 @@ uint256 static GetOrphanRoot(const CBlockHeader* pblock)
 
 int64 static GetBlockValue(int nHeight, int64 nFees)
 {
-    int64 nSubsidy = 2500 * COIN;
+    int64 nSubsidy = 5 * COIN;
 
-    // Subsidy is cut off 25% every milion blocks, which will occur approximately every 4 years
+    // Subsidy is cut off 50% every milion blocks, which will occur approximately every 4 years
     nSubsidy >>= (nHeight / 1000000); // Outastracoin: 1 milion blocks in ~4 years
 
     return nSubsidy + nFees;
 }
 
 static const int64 nTargetTimespan = 2 * 24 * 60 * 60; // Outastracoin: 2 days
-static const int64 nTargetSpacing = 1 * 30; // Outastracoin: 0.5 minutes
+static const int64 nTargetSpacing = 5 * 60; // Outastracoin: 5 minutes
 static const int64 nInterval = nTargetTimespan / nTargetSpacing;
 
 //
@@ -2728,7 +2728,7 @@ bool LoadBlockIndex()
         pchMessageStart[1] = 0xc1;
         pchMessageStart[2] = 0xb7;
         pchMessageStart[3] = 0xdc;
-        hashGenesisBlock = uint256("0x92ef23c05be291037d71874ad2e6deee693fdcde0d14996925cd5c6200acd993");
+        hashGenesisBlock = uint256("0x8de903f4798d4eabd8d1698b122e63fd81c333092b98cfa9fe60e965f926a1cd");
     }
 
     //
@@ -2761,26 +2761,26 @@ bool InitBlockIndex() {
         //   vMerkleTree: 97ddfbbae6
 
         // Genesis block
-        const char* pszTimestamp = "20 Dec 2016 05:58:47 UTC OutAstra";
+        const char* pszTimestamp = "Czwartek, 22 gru 2016 17:33:00 OutAstra";
         CTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CBigNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-        txNew.vout[0].nValue = 5000 * COIN;
+        txNew.vout[0].nValue = 5 * COIN;
         txNew.vout[0].scriptPubKey = CScript() << ParseHex("04f27731aa06febf844fa2de9834da9deaba41d03efb2d5bb571edfc0d3c71957611c52fe2d0b7cff9aeb12945194d172ec6a4c2f8d83a54532cfec44de26bd9f3") << OP_CHECKSIG;
         CBlock block;
         block.vtx.push_back(txNew);
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1482213527;
+        block.nTime    = 1482424380;
         block.nBits    = 0x1e0ffff0;
-        block.nNonce   = 525098519;
+        block.nNonce   = 1237919;
 
         if (fTestNet)
         {
             block.nTime    = 1482213528;
-            block.nNonce   = 1191044450;
+            block.nNonce   = 1452508;
         }
 
         //// debug print
@@ -2831,7 +2831,7 @@ bool InitBlockIndex() {
 
         printf("%s\n", hashGenesisBlock.ToString().c_str());
         printf("%s\n", block.hashMerkleRoot.ToString().c_str());
-        assert(block.hashMerkleRoot == uint256("0x2139b792a807fd60a56502dbc8e45f81e387513012424378ad06d89824d2a463"));
+        assert(block.hashMerkleRoot == uint256("0x343b8c1af8b03e1d6de5180637d088c678dea8bbe75200025e44ef33df79cd91"));
         block.print();
         //=====
 
