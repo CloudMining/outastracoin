@@ -47,13 +47,13 @@ namespace Checkpoints
 
     static MapCheckpoints mapCheckpointsTestnet =
         boost::assign::map_list_of
-        (  1152, uint256("0xe0d8f14abd8cd9b539f6bbf73208af80445c9cfe1ed90a0e6a70bcfaa0e0596c"))
+        (  0, uint256("0xf50e7a25b0b380c8b0f32e308feba4c97d4ed6b62504303212b8c573bd28b1bc"))
         ;
     static const CCheckpointData dataTestnet = {
         &mapCheckpointsTestnet,
-        1482445100,
-        1168,
-        2
+        1482424380,
+        0,
+        0
     };
 
     const CCheckpointData &Checkpoints() {
@@ -72,8 +72,8 @@ namespace Checkpoints
 
         MapCheckpoints::const_iterator i = checkpoints.find(nHeight);
         if (i == checkpoints.end()) return true;
-        return hash == i->second;
-        // return true;
+        // return hash == i->second;
+        return true;
     }
 
     // Guess how far we are in the verification process at the given block index
@@ -114,8 +114,8 @@ namespace Checkpoints
 
         const MapCheckpoints& checkpoints = *Checkpoints().mapCheckpoints;
 
-        return mapCheckpoints.rbegin()->first;
-        // return 0;
+        // return mapCheckpoints.rbegin()->first;
+        return 0;
     }
 
     CBlockIndex* GetLastCheckpoint(const std::map<uint256, CBlockIndex*>& mapBlockIndex)
@@ -130,8 +130,8 @@ namespace Checkpoints
             const uint256& hash = i.second;
             std::map<uint256, CBlockIndex*>::const_iterator t = mapBlockIndex.find(hash);
             if (t != mapBlockIndex.end())
-            return t->second;
-            // return NULL;
+            // return t->second;
+            return NULL;
         }
         return NULL;
     }
