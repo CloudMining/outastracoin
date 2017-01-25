@@ -1,6 +1,6 @@
 [Protocol]
-exec=bitcoin-qt '%u'
-protocol=bitcoin
+exec=outastracoin-qt '%u'
+protocol=outastracoin
 input=none
 output=none
 helper=true

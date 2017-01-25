@@ -1,4 +1,4 @@
-Copyright (c) 2009-2013 Bitcoin Developers
+Copyright (c) 2009-2017 Bitcoin Developers
 Distributed under the MIT/X11 software license, see the accompanying
 file COPYING or http://www.opensource.org/licenses/mit-license.php.
 This product includes software developed by the OpenSSL Project for use in the [OpenSSL Toolkit](http://www.openssl.org/). This product includes
@@ -86,4 +86,4 @@ MSYS shell:
 
 	cd \outastracoin\src
 	mingw32-make -f makefile.mingw
-	strip litecoind.exe
+	strip outastracoind.exe

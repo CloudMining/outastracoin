@@ -3,9 +3,9 @@ Outastracoin integration/staging tree
 
 https://www.outastra.com
 
-Copyright (c) 2009-2014 Bitcoin Developers
-Copyright (c) 2011-2014 Litecoin Developers
-Copyright (c) 2016 Outastracoin Developers
+Copyright (c) 2009-2017 Bitcoin Developers
+Copyright (c) 2011-2017 Litecoin Developers
+Copyright (c) 2016-2017 Outastracoin Developers
 
 What is Outastracoin?
 ----------------
@@ -31,7 +31,7 @@ Development process
 Developers work in their own trees, then submit pull requests when they think
 their feature or bug fix is ready.
 
-If it is a simple/trivial/non-controversial change, then one of the Litecoin
+If it is a simple/trivial/non-controversial change, then one of the Outastracoin
 development team members simply pulls it.
 
 If it is a *more complicated or potentially controversial* change, then the patch

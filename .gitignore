@@ -9,11 +9,13 @@ src/test_outastracoin
 *.orig
 *.o
 *.patch
-.litecoin
+.OutAstra
 
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
+Makefile.Debug
+Makefile.Release
 outastracoin-qt
 Outastracoin-Qt.app
 

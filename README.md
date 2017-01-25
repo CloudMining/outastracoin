@@ -3,9 +3,9 @@ Outastracoin integration/staging tree
 
 https://www.outastra.com
 
-Copyright (c) 2009-2016 Bitcoin Developers
-Copyright (c) 2011-2016 Litecoin Developers
-Copyright (c) 2016 Outastracoin Developers
+Copyright (c) 2009-2017 Bitcoin Developers
+Copyright (c) 2011-2017 Litecoin Developers
+Copyright (c) 2016-2017 Outastracoin Developers
 
 What is Outastracoin?
 ----------------
@@ -13,7 +13,7 @@ What is Outastracoin?
 Outastracoin is a alternatvie version of Bitcoin using scrypt just like Litecoin as a proof-of-work algorithm.
  - 5 minute block targets
  - ~640 million total coins
- - 5 coins per block
+ - 500 coins per block
  - 576 blocks to retarget difficulty
 
 For more information, as well as an immediately useable, binary version of
