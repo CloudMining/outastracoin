@@ -2184,7 +2184,7 @@ Osoite: %4</translation>
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>outastracoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+94"/>
         <source>Outastracoin version</source>

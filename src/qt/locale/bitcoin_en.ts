@@ -2213,7 +2213,7 @@ Address: %4
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>outastracoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+94"/>
         <source>Outastracoin version</source>
