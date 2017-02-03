@@ -36,8 +36,8 @@ const std::string CLIENT_NAME("OutAstraClient");
 // git will put "#define GIT_ARCHIVE 1" on the next line inside archives. 
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
-#    define GIT_COMMIT_ID "4817e63"
-#    define GIT_COMMIT_DATE "2016-12-22 17:44:43 -0800 UTC"
+#    define GIT_COMMIT_ID "5b9056f"
+#    define GIT_COMMIT_DATE "2017-02-03 23:15:10 +0100 UTC"
 #endif
 
 #define BUILD_DESC_FROM_COMMIT(maj,min,rev,build,commit) \
