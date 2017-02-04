@@ -75,7 +75,7 @@ the output from this command will tell you that you need to make a outastracoin.
 
 For Linux users, type:
  
-```nano ~/.outastracoin/outastracoin.conf```
+```nano ~/.OutAstra/outastracoin.conf```
 (For Windows users, see below. For mac users, the command is ```nano ~/Library/Application\ Support\Outastracoin\outastracoin.conf```)
     
 Paste the output from the `outastracoind` command into the outastracoin.conf like this: (It is recommended to change the password to something unique.)
