@@ -1,28 +1,28 @@
-Name Outastracoin
+Name "OutAstra Core"
 
 RequestExecutionLevel highest
 SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.8.7.9
-!define COMPANY "Outastracoin project"
-!define URL https://www.outastra.com/
+!define VERSION 0.8.8.1
+!define COMPANY "OutAstra"
+!define URL http://outastra.com/
 
 # MUI Symbol Definitions
-!define MUI_ICON "../share/pixmaps/bitcoin.ico"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard.bmp"
-!define MUI_HEADERIMAGE
+!define MUI_ICON "..\share\pixmaps\bitcoin.ico"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "..\share\pixmaps\nsis-wizard.bmp"
+!define MUI_HEADERIMAGE "..\share\pixmaps\nsis-header.bmp"
 !define MUI_HEADERIMAGE_RIGHT
-!define MUI_HEADERIMAGE_BITMAP "../share/pixmaps/nsis-header.bmp"
+!define MUI_HEADERIMAGE_BITMAP "..\share\pixmaps\nsis-header.bmp"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER Outastracoin
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "OutAstra Core"
 !define MUI_FINISHPAGE_RUN $INSTDIR\outastracoin-qt.exe
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "../share/pixmaps/nsis-wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\share\pixmaps\nsis-wizard.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 # Included files
@@ -46,7 +46,7 @@ Var StartMenuGroup
 
 # Installer attributes
 OutFile outastracoin-${VERSION}-win32-setup.exe
-InstallDir $PROGRAMFILES\Outastracoin
+InstallDir "$PROGRAMFILES\OutAstra Core"
 CRCCheck on
 XPStyle on
 BrandingText " "
@@ -57,8 +57,8 @@ VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
 VIAddVersionKey FileVersion "${VERSION}"
-VIAddVersionKey FileDescription ""
-VIAddVersionKey LegalCopyright ""
+VIAddVersionKey FileDescription "OutAstra Core ${VERSION}"
+VIAddVersionKey LegalCopyright "Copyright 2016-2017 The Outastracoin Developers."
 InstallDirRegKey HKCU "${REGKEY}" Path
 ShowUninstDetails show
 
@@ -66,13 +66,13 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ../release/outastracoin-qt.exe
-    File /oname=COPYING.txt ../COPYING
-    File /oname=readme.txt ../doc/README_windows.txt
+    File ..\release\outastracoin-qt.exe
+    File /oname=COPYING.txt ..\COPYING
+    File /oname=readme.txt ..\doc\README_windows.txt
     SetOutPath $INSTDIR\daemon
-    File ../src/outastracoind.exe
+    File ..\src\outastracoind.exe
     SetOutPath $INSTDIR\src
-    File /r /x *.exe /x *.o ../src\*.*
+    File /r /x *.exe /x *.o ..\src\*.*
     SetOutPath $INSTDIR
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 
@@ -150,8 +150,19 @@ no_smgroup:
 SectionEnd
 
 # Installer functions
+
 Function .onInit
-    InitPluginsDir
+  InitPluginsDir
+  File "/oname=$PluginsDir\spltmp.bmp" "C:\Users\Deadjim\Documents\GitHub\outastracoin\share\pixmaps\llama.bmp"
+
+; optional
+; File /oname=$PluginsDir\spltmp.wav "my_splashsound.wav"
+
+  advsplash::show 1000 600 400 -1 $PluginsDir\spltmp
+
+  Pop $0 ; $0 has '1' if the user closed the splash screen early,
+         ; '0' if everything closed normally, and '-1' if some error occurred.
+
 FunctionEnd
 
 # Uninstaller functions

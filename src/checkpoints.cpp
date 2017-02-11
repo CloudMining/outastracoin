@@ -36,24 +36,26 @@ namespace Checkpoints
     static MapCheckpoints mapCheckpoints =
         boost::assign::map_list_of
         (  0, uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"))
+        (  1500, uint256("0x9b81df85d6a2d9ee8b27927591aaefcd854cc54277b3453f76996bbff7ead9b7"))
         ;
     static const CCheckpointData data = {
         &mapCheckpoints,
-        1482424380, // * UNIX timestamp of last checkpoint block
-        0,    // * total number of transactions between genesis and last checkpoint
+        1486517432, // * UNIX timestamp of last checkpoint block
+        1501,    // * total number of transactions between genesis and last checkpoint
                     //   (the tx=... number in the SetBestChain debug.log lines)
-        0     // * estimated number of transactions per day after checkpoint
+        30.0     // * estimated number of transactions per day after checkpoint
     };
 
     static MapCheckpoints mapCheckpointsTestnet =
         boost::assign::map_list_of
         (  0, uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"))
+        (  1382, uint256("0x768b96e631838986c83c7a3dec5515e50f885f0c29725476cf85ca2e69d4d6f4"))
         ;
     static const CCheckpointData dataTestnet = {
         &mapCheckpointsTestnet,
         1482424380,
-        0,
-        0
+        1386,
+        10.0
     };
 
     const CCheckpointData &Checkpoints() {
