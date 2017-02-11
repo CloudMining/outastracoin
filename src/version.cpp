@@ -8,7 +8,7 @@
 // Name of client reported in the 'version' message. Report the same name
 // for both bitcoind and bitcoin-qt, to make it harder for attackers to
 // target servers or GUI users specifically.
-const std::string CLIENT_NAME("OutAstraClient");
+const std::string CLIENT_NAME("OutAstra Core");
 
 // Client version number
 #define CLIENT_VERSION_SUFFIX   "-beta"
@@ -36,8 +36,8 @@ const std::string CLIENT_NAME("OutAstraClient");
 // git will put "#define GIT_ARCHIVE 1" on the next line inside archives. 
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
-#    define GIT_COMMIT_ID "5b9056f"
-#    define GIT_COMMIT_DATE "2017-02-03 23:15:10 +0100 UTC"
+#    define GIT_COMMIT_ID "7caef78"
+#    define GIT_COMMIT_DATE "2017-02-11 16:43:27 +0000 UTC"
 #endif
 
 #define BUILD_DESC_FROM_COMMIT(maj,min,rev,build,commit) \

@@ -1,11 +1,11 @@
-Name OutAstra Client (32-bit)
+Name "OutAstra Core"
 
 RequestExecutionLevel highest
 SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.8.8.0
+!define VERSION 0.8.8.1
 !define COMPANY "OutAstra"
 !define URL http://outastra.com/
 
@@ -19,7 +19,7 @@ SetCompressor /SOLID lzma
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER OutAstra
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "OutAstra Core"
 !define MUI_FINISHPAGE_RUN $INSTDIR\outastracoin-qt.exe
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\share\pixmaps\nsis-wizard.bmp"
@@ -46,7 +46,7 @@ Var StartMenuGroup
 
 # Installer attributes
 OutFile outastracoin-${VERSION}-win32-setup.exe
-InstallDir $PROGRAMFILES\Outastracoin
+InstallDir "$PROGRAMFILES\OutAstra Core"
 CRCCheck on
 XPStyle on
 BrandingText " "
@@ -57,8 +57,8 @@ VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
 VIAddVersionKey FileVersion "${VERSION}"
-VIAddVersionKey FileDescription ""
-VIAddVersionKey LegalCopyright ""
+VIAddVersionKey FileDescription "OutAstra Core ${VERSION}"
+VIAddVersionKey LegalCopyright "Copyright 2016-2017 The Outastracoin Developers."
 InstallDirRegKey HKCU "${REGKEY}" Path
 ShowUninstDetails show
 
@@ -150,8 +150,19 @@ no_smgroup:
 SectionEnd
 
 # Installer functions
+
 Function .onInit
-    InitPluginsDir
+  InitPluginsDir
+  File "/oname=$PluginsDir\spltmp.bmp" "C:\Users\Deadjim\Documents\GitHub\outastracoin\share\pixmaps\llama.bmp"
+
+; optional
+; File /oname=$PluginsDir\spltmp.wav "my_splashsound.wav"
+
+  advsplash::show 1000 600 400 -1 $PluginsDir\spltmp
+
+  Pop $0 ; $0 has '1' if the user closed the splash screen early,
+         ; '0' if everything closed normally, and '-1' if some error occurred.
+
 FunctionEnd
 
 # Uninstaller functions
