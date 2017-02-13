@@ -255,7 +255,7 @@ public:
         bnProofOfWorkLimit = ~uint256(0) >> 1;
         nMaxTipAge = 0x7fffffff;
         genesis.nTime = 1482424380;
-        genesis.nBits = 0x207fffff;
+        genesis.nBits = 0x1e0ffff0;
         genesis.nNonce = 3187270;
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 44317;
