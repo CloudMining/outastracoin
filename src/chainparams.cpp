@@ -79,13 +79,13 @@ static const Checkpoints::CCheckpointData dataTestnet = {
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
         boost::assign::map_list_of
-        ( 0, uint256("0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"))
+        ( 0, uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"))
         ;
 static const Checkpoints::CCheckpointData dataRegtest = {
         &mapCheckpointsRegtest,
-        0,
-        0,
-        0
+        1482424380,
+        1386,
+        10.0
     };
 
 class CMainParams : public CChainParams {
@@ -200,12 +200,12 @@ public:
         genesis.nNonce = 3187270;
         hashGenesisBlock = genesis.GetHash();
         assert(hashGenesisBlock == uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"));
-
+        assert(genesis.hashMerkleRoot == uint256("0xc117f2cfa78bb65bc3a88d6cbafe05a96f54b69d9820387238f15bc5b0b07a8a"));
+        
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("outastracointools.com", "testnet-seed.OutAstratools.com"));
-        vSeeds.push_back(CDNSSeedData("xurious.com", "testnet-seed.oac.xurious.com"));
-        vSeeds.push_back(CDNSSeedData("wemine-testnet.com", "dnsseed.wemine-testnet.com"));
+        vSeeds.push_back(CDNSSeedData("dnsseed.outastra.com", "dnsseed.outastracoin.pro"));
+
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -260,6 +260,8 @@ public:
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 44317;
         assert(hashGenesisBlock == uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"));
+        assert(genesis.hashMerkleRoot == uint256("0xc117f2cfa78bb65bc3a88d6cbafe05a96f54b69d9820387238f15bc5b0b07a8a"));
+
 
         vFixedSeeds.clear(); //! Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  //! Regtest mode doesn't have any DNS seeds.
