@@ -250,16 +250,16 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
-        nTargetTimespan = 3.5 * 24 * 60 * 60; // 3.5 days
-        nTargetSpacing = 2.5 * 60; // 2.5 minutes
+        nTargetTimespan = 2 * 24 * 60 * 60; // Outastracoin: 2 days
+        nTargetSpacing = 5 * 60; // Outastracoin: 5 minutes
         bnProofOfWorkLimit = ~uint256(0) >> 1;
-        nMaxTipAge = 24 * 60 * 60;
-        genesis.nTime = 1296688602;
+        nMaxTipAge = 0x7fffffff;
+        genesis.nTime = 1482424380;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 0;
+        genesis.nNonce = 3187270;
         hashGenesisBlock = genesis.GetHash();
-        nDefaultPort = 19444;
-        assert(hashGenesisBlock == uint256("0x530827f38f93b43ed12af0b3ad25a288dc02ed74d6d7857862df51fc56c416f9"));
+        nDefaultPort = 44317;
+        assert(hashGenesisBlock == uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"));
 
         vFixedSeeds.clear(); //! Regtest mode doesn't have any fixed seeds.
         vSeeds.clear();  //! Regtest mode doesn't have any DNS seeds.
@@ -290,7 +290,7 @@ public:
     CUnitTestParams() {
         networkID = CBaseChainParams::UNITTEST;
         strNetworkID = "unittest";
-        nDefaultPort = 18445;
+        nDefaultPort = 44415;
         vFixedSeeds.clear(); //! Unit test mode doesn't have any fixed seeds.
         vSeeds.clear();  //! Unit test mode doesn't have any DNS seeds.
 
