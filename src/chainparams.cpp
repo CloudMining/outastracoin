@@ -55,37 +55,35 @@ static void convertSeed6(std::vector<CAddress> &vSeedsOut, const SeedSpec6 *data
 static Checkpoints::MapCheckpoints mapCheckpoints =
         boost::assign::map_list_of
         (  0, uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"))
-        (  1500, uint256("0x9b81df85d6a2d9ee8b27927591aaefcd854cc54277b3453f76996bbff7ead9b7"))
         ;
 static const Checkpoints::CCheckpointData data = {
         &mapCheckpoints,
-        1486517432, // * UNIX timestamp of last checkpoint block
-        1501,   // * total number of transactions between genesis and last checkpoint
+        1482424380, // * UNIX timestamp of last checkpoint block
+        0,   // * total number of transactions between genesis and last checkpoint
                     //   (the tx=... number in the SetBestChain debug.log lines)
-        30.0     // * estimated number of transactions per day after checkpoint
+        0.0     // * estimated number of transactions per day after checkpoint
     };
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
         boost::assign::map_list_of
         ( 0, uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"))
-        ( 1382, uint256("0x768b96e631838986c83c7a3dec5515e50f885f0c29725476cf85ca2e69d4d6f4"))
         ;
 static const Checkpoints::CCheckpointData dataTestnet = {
         &mapCheckpointsTestnet,
         1482424380,
-        1386,
-        10.0
+        0,
+        0
     };
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
         boost::assign::map_list_of
-        ( 0, uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"))
+        ( 0, uint256("0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"))
         ;
 static const Checkpoints::CCheckpointData dataRegtest = {
         &mapCheckpointsRegtest,
-        1482424380,
-        1386,
-        10.0
+        0,
+        0,
+        0
     };
 
 class CMainParams : public CChainParams {
@@ -143,7 +141,7 @@ public:
         assert(hashGenesisBlock == uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"));
         assert(genesis.hashMerkleRoot == uint256("0xc117f2cfa78bb65bc3a88d6cbafe05a96f54b69d9820387238f15bc5b0b07a8a"));
 
-        vSeeds.push_back(CDNSSeedData("dnsseed.outastra.com", "dnsseed.outastracoin.pro"));
+        vSeeds.push_back(CDNSSeedData("dnsseed.outastracoin.info", "dnsseed.outastracoin.pro"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,15);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
@@ -204,7 +202,7 @@ public:
         
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("dnsseed.outastra.com", "dnsseed.outastracoin.pro"));
+        vSeeds.push_back(CDNSSeedData("dnsseed.outastracoin.pro", "dnsseed.outastracoin.pro"));
 
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
