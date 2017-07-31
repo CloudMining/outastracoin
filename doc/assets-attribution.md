@@ -7,7 +7,7 @@ The following is a list of assets used in the bitcoin source and their proper at
 
 ### Assets Used
 	src/qt/res/icons/clock*.png, src/qt/res/icons/tx*.png,
-	src/qt/res/src/clock_outastra.svg, src/qt/res/src/clock1.svg,
+	src/qt/res/src/clock_green.svg, src/qt/res/src/clock1.svg,
 	src/qt/res/src/clock2.svg, src/qt/res/src/clock3.svg,
 	src/qt/res/src/clock4.svg, src/qt/res/src/clock5.svg,
 	src/qt/res/src/inout.svg, src/qt/res/src/questionmark.svg

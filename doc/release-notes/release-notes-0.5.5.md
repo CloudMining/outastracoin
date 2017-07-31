@@ -22,7 +22,7 @@ Display an error, rather than crashing, if encoding a QR Code failed (0.6.0.7)
 Don't erroneously set "Display addresses" for users who haven't explicitly enabled it (Bitcoin-Qt)
 Some non-ASCII input in JSON-RPC expecting hexadecimal may have been misinterpreted rather than rejected
 Missing error condition checking added
-Do not show outastra tick unless all known blocks are downloaded. Fixes #921 (Bitcoin-Qt)
+Do not show green tick unless all known blocks are downloaded. Fixes #921 (Bitcoin-Qt)
 Increase time ago of last block for "up to date" status from 30 to 90 minutes
 Show a message box when runaway exception happens (Bitcoin-Qt)
 Use a messagebox to display the error when -server is provided without providing a rpc password

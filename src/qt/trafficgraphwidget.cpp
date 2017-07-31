@@ -106,7 +106,7 @@ void TrafficGraphWidget::paintEvent(QPaintEvent *)
         QPainterPath p;
         paintPath(p, vSamplesIn);
         painter.fillPath(p, QColor(0, 255, 0, 128));
-        painter.setPen(Qt::outastra);
+        painter.setPen(Qt::green);
         painter.drawPath(p);
     }
     if(!vSamplesOut.empty()) {

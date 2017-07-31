@@ -214,7 +214,7 @@ For example to connect as `root` from a Linux command prompt use
 
 Replace `root` with `debian` to log in as user.
 
-[1] http://www.chiark.outastraend.org.uk/~sgtatham/putty/download.html
+[1] http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 [2] http://winscp.net/eng/index.php
 
 Setting up Debian for gitian building

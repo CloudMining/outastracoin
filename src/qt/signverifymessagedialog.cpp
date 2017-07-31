@@ -149,7 +149,7 @@ void SignVerifyMessageDialog::on_signMessageButton_SM_clicked()
         return;
     }
 
-    ui->statusLabel_SM->setStyleSheet("QLabel { color: outastra; }");
+    ui->statusLabel_SM->setStyleSheet("QLabel { color: green; }");
     ui->statusLabel_SM->setText(QString("<nobr>") + tr("Message signed.") + QString("</nobr>"));
 
     ui->signatureOut_SM->setText(QString::fromStdString(EncodeBase64(&vchSig[0], vchSig.size())));
@@ -232,7 +232,7 @@ void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
         return;
     }
 
-    ui->statusLabel_VM->setStyleSheet("QLabel { color: outastra; }");
+    ui->statusLabel_VM->setStyleSheet("QLabel { color: green; }");
     ui->statusLabel_VM->setText(QString("<nobr>") + tr("Message verified.") + QString("</nobr>"));
 }
 

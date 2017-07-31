@@ -71,8 +71,8 @@ static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
 static const Checkpoints::CCheckpointData dataTestnet = {
         &mapCheckpointsTestnet,
         1482424380,
-        547,
-        576
+        0,
+        0
     };
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
@@ -134,7 +134,7 @@ public:
         assert(hashGenesisBlock == uint256("0x3fa994d9991496c8d7b2609fbbabe0e560dca8455db7f56403d4b647c5efe170"));
         assert(genesis.hashMerkleRoot == uint256("0xc117f2cfa78bb65bc3a88d6cbafe05a96f54b69d9820387238f15bc5b0b07a8a"));
 
-//        vSeeds.push_back(CDNSSeedData("outastracoin.online", "dnsseed.outastracoin.online"));
+		//vSeeds.push_back(CDNSSeedData("outastracoin.pro", "seed.outastracoin.pro"));
 
         base58Prefixes[PUBKEY_ADDRESS] = list_of(23);
         base58Prefixes[SCRIPT_ADDRESS] = list_of(23);
@@ -193,9 +193,9 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        //vSeeds.push_back(CDNSSeedData("outastracoin.online", "dnsseed.outastracoin.online"));
+        //vSeeds.push_back(CDNSSeedData("outastracoin.pro", "outastracoin.pro"));
 
-        base58Prefixes[PUBKEY_ADDRESS] = list_of(128);
+        base58Prefixes[PUBKEY_ADDRESS] = list_of(123);
         base58Prefixes[SCRIPT_ADDRESS] = list_of(196);
         base58Prefixes[SECRET_KEY]     = list_of(239);
         base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x35)(0x87)(0xCF);
