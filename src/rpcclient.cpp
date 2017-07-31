@@ -3,7 +3,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "roaclient.h"
+#include "rpcclient.h"
 
 #include "rpcprotocol.h"
 #include "util.h"

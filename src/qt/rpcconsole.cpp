@@ -12,7 +12,7 @@
 #include "main.h"
 #include "chainparams.h"
 #include "rpcserver.h"
-#include "roaclient.h"
+#include "rpcclient.h"
 #include "util.h"
 
 #include "json/json_spirit_value.h"

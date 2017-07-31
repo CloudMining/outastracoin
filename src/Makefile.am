@@ -111,7 +111,7 @@ BITCOIN_CORE_H = \
   protocol.h \
   pubkey.h \
   random.h \
-  roaclient.h \
+  rpcclient.h \
   rpcprotocol.h \
   rpcserver.h \
   script/interpreter.h \
@@ -286,7 +286,7 @@ endif
 # cli: shared between bitcoin-cli and bitcoin-qt
 libbitcoin_cli_a_CPPFLAGS = $(BITCOIN_INCLUDES)
 libbitcoin_cli_a_SOURCES = \
-  roaclient.cpp \
+  rpcclient.cpp \
   $(BITCOIN_CORE_H)
 
 nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h

@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "rpcserver.h"
-#include "roaclient.h"
+#include "rpcclient.h"
 
 #include "base58.h"
 #include "wallet.h"

@@ -5,7 +5,7 @@
 
 #include "chainparamsbase.h"
 #include "clientversion.h"
-#include "roaclient.h"
+#include "rpcclient.h"
 #include "rpcprotocol.h"
 #include "util.h"
 #include "utilstrencodings.h"
