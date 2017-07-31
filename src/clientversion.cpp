@@ -18,7 +18,7 @@ const std::string CLIENT_NAME("Outastracoin");
 /**
  * Client version number
  */
-#define CLIENT_VERSION_SUFFIX "-core"
+#define CLIENT_VERSION_SUFFIX ""
 
 
 /**
